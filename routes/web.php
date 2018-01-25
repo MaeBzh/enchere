@@ -22,3 +22,5 @@ Route::resource('enchere', 'EnchereController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('profil', 'profilController@afficherProfil');
