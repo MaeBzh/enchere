@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('user', 'UserController');
+Route::resource('good', 'GoodController');
+Route::resource('enchere', 'EnchereController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
