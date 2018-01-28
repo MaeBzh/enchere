@@ -23,4 +23,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('profil', 'profilController@afficherProfil');
+Route::get('/profil', 'ProfilController@afficherProfil');
+Route::get('/ventesEnCours', 'UserController@afficherVentesEnCours');
+Route::get('/ventesTerminees', 'UserController@afficherVentesTerminees');
+Route::get('/achats', 'UserController@afficherAchats');
+Route::get('/encheresEnCours', 'UserController@afficherEncheresEnCours');
+Route::get('/formulaireMiseEnVente', 'GoodController@afficherFormulaireMiseEnVente');
+Route::post('/formulaireMiseEnVente', 'GoodController@traiterFormulaireMiseEnVente');
+Route::post('/rechercheObjet', 'GoodController@rechercheObjet');
+
+Route::get('test', function (){
+    $user = \Illuminate\Support\Facades\Auth::user();
+    $bien = \App\Good::find(4);
+    $encheres = $user->encheres()->where("good_id", $bien->id)->limit(5)->orderBy("date_enchere", "desc")->get();
+    dd($encheres);
+});
