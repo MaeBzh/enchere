@@ -2,8 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -28,15 +30,34 @@ class User extends Authenticatable
     ];
 
     protected $table = 'users';
-    public $timestamps = false ;
+    public $timestamps = false;
 
-    public function biens()
+    public function biensAchetes()
     {
-        return $this->hasMany('App\Good');
+        return $this->hasMany(Good::class, 'acheteur_id')->where("date_fin", '<=', Carbon::now());
     }
 
-    public function encheres()
+    /*public function ventesEnCours()
     {
-        return $this->hasMany('App\Enchere');
+        return $this->hasMany(Good::class, 'acheteur_id')->where("date_fin", '>', Carbon::now());
+    }*/
+
+    public function biensVendus()
+    {
+        return $this->hasMany(Good::class, 'vendeur_id')->where("date_fin", '<=', Carbon::now());
+    }
+
+    public function biensEnVente()
+    {
+        return $this->hasMany(Good::class, 'vendeur_id')->where("date_fin" ,'>', Carbon::now());
+    }
+
+    public function encheresVentesTerminees()
+    {
+        return $this->hasMany(Enchere::class, 'acheteur_id')->join("goods", "goods.id", '=', "encheres.good_id")->Where("date_fin", '<=', Carbon::now());
+    }
+    public function encheresEnCours()
+    {
+        return $this->hasMany(Enchere::class, 'acheteur_id')->join("goods", "goods.id", '=', "encheres.good_id")->Where("date_fin", '>', Carbon::now());
     }
 }
