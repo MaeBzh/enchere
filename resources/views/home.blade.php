@@ -1,22 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="panel panel-default">
+    <h1 class="text-center">@if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+        Bonjour {{ ucfirst(Auth::user()->username) }} !</h1>
+   {{-- <div class="panel panel-default">
         <div class="panel-heading">
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-            Bonjour {{ ucfirst(Auth::user()->username) }} !
-        </div>
 
-        <div class="panel-body">
+        </div>
+--}}
+    {{--    <div class="panel-body">
             <div class="row">
                 <div class="col-md-3">
                     <ul class="nav">
                         <li class="nav-item" style="cursor: pointer">
-                            <a class="nav-link active" onclick="afficherProfil()">Votre profil</a>
+                            <a class="nav-link active" onclick="afficherProfil()">Les ventes en cours</a>
+                        </li>
+                        <li class="nav-item" style="cursor: pointer">
+                            --}}{{--<a class="nav-link active" onclick="afficherProfil()">Votre profil</a>--}}{{--
+                            <a class="nav-link active" href="{{ url("/profil") }}">Votre profil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link">Vos ventes terminées</a>
@@ -50,7 +55,7 @@
 
                 </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 @endsection
 
