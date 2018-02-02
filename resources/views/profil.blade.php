@@ -3,19 +3,25 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-            Bonjour {{ ucfirst(Auth::user()->username) }} !
+            <h4>Mon profil</h4>
         </div>
 
         <div class="panel-body">
+            <h4>Informations utilisateurs</h4>
             <ul class="list-group">
                 <li class="list-group-item">Nom : {{ $user->nom }}</li>
                 <li class="list-group-item">Prénom : {{ $user->prenom }}</li>
                 <li class="list-group-item">E-mail : {{ $user->email }}</li>
+            </ul>
+
+            <hr>
+
+            <h4>Informations sur les ventes et achats</h4>
+            <ul class="list-group">
+                <li class="list-group-item">Nombre d'objets mise en ventes : {{ $user->biensVendus->count() + $user->biensEnVente->count() }}</li>
+                <li class="list-group-item">Nombre d'objets vendus : {{ $user->biensVendus->count() }}</li>
+                <li class="list-group-item">Nombre d'objets actuellement en ventes : {{ $user->biensEnVente->count() }}</li>
+                <li class="list-group-item">Nombre d'objets achetés : {{ $user->encheresVentesTerminees->count() }}</li>
             </ul>
 
         </div>
