@@ -9,6 +9,11 @@ class Good extends Model
     protected $table = 'goods';
     public $timestamps = false;
 
+    protected $dates = [
+        "date_debut",
+        "date_fin"
+    ];
+
     public function acheteur()
     {
         return $this->belongsTo(User::class);
