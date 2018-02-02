@@ -30,7 +30,10 @@ Route::get('/achats', 'UserController@afficherAchats');
 Route::get('/encheresEnCours', 'UserController@afficherEncheresEnCours');
 Route::get('/formulaireMiseEnVente', 'GoodController@afficherFormulaireMiseEnVente');
 Route::post('/formulaireMiseEnVente', 'GoodController@traiterFormulaireMiseEnVente');
-Route::post('/rechercheObjet', 'GoodController@rechercheObjet');
+Route::post('/rechercheObjet', 'GoodController@traiterRechercheObjet');
+Route::get('/objet/{id}', 'GoodController@afficherObjet');
+
+
 
 Route::get('test', function (){
     $user = \Illuminate\Support\Facades\Auth::user();
