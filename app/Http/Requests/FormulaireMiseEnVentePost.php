@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class FormulaireMiseEnVentePost extends FormRequest
 {
@@ -27,7 +28,7 @@ class FormulaireMiseEnVentePost extends FormRequest
             "titre" => ['required', "string", "max:255"],
             "description" => ['required', "string"],
             "prix_depart" => ["required", "numeric", "min:0.00"],
-            "photo" => ["image"]
+            "photo" => ["sometimes", "image"]
         ];
     }
 }
