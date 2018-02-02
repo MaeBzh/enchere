@@ -3,7 +3,8 @@
         <div class="navbar-header">
 
             <!-- Collapsed Hamburger -->
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#app-navbar-collapse" aria-expanded="false">
                 <span class="sr-only">Toggle Navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -18,10 +19,12 @@
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
+            @auth
             <ul class="nav navbar-nav">
 
                 <li class="dropdown, @if(\Request::is('profil')) active @endif">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Votre compte <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Votre compte <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url('/profil') }}">Votre profil</a></li>
                         <li><a href="{{ url('/ventesEnCours') }}">Vos ventes en cours</a></li>
@@ -34,12 +37,20 @@
                 <li><a href="#">Ventes en cours</a></li>
 
             </ul>
-            <form class="navbar-form navbar-left" method="post" action="{{--{{ route('rechercheObjet') }}--}}">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Chercher un objet">
+            <form class="navbar-form navbar-left" method="post" role="search" action="{{ url('rechercheObjet') }}">
+                {{ csrf_field() }}
+                <div class="input-group">
+                    <input type="text" class="form-control" name="recherche"
+                           placeholder="Chercher un objet">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
                 </div>
-                <button type="submit" class="btn btn-default">Valider</button>
+
             </form>
+            @endauth
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
@@ -49,13 +60,9 @@
                     <li><a href="{{ route('login') }}">Connexion</a></li>
                     <li><a href="{{ route('register') }}">Inscription</a></li>
                 @else
+                    <li> <a>Bonjour {{ ucfirst(Auth::user()->username) }} !</a></li>
                     <li>
-                        <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                            Déconnexion
-                        </a>
-
+                        <a onclick="$('form#logout-form').submit();">Déconnexion</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
