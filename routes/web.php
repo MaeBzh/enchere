@@ -20,6 +20,7 @@ Route::resource('good', 'GoodController');
 Route::resource('enchere', 'EnchereController');
 
 Auth::routes();
+Route::get('/confirmerInscription/{inscriptionToken}', 'Auth\RegisterController@confirmationInscription');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

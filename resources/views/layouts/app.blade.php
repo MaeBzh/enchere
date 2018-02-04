@@ -16,6 +16,8 @@
 </head>
 <body>
 <div id="app">
+    @include('layouts.notification')
+
     @include('layouts.header')
 
     <div class="container">
