@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enchere;
 use App\Good;
 use App\Http\Requests\FormulaireMiseEnVentePost;
+use App\Http\Requests\RechercheObjetPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,24 +14,17 @@ use Illuminate\Support\Facades\Storage;
 
 class GoodController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function afficherFormulaireMiseEnVente()
     {
         return view("formulaireMiseEnVente");
     }
 
-    public function afficherObjet($id)
-    {
-        $data = array(
-            "objet" => Good::find($id)
-        );
-        return view("detailObjet", $data);
-    }
-
     /**
-     * Traitement des informations envoyées depuis le formulaire
-     * On rentre dans la fonction uniquement si les data du formulaire ont été validées (cf : app/Requests/FormulaireMiseEnVentePost::rules)
-     *
      * @param FormulaireMiseEnVentePost $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function traiterFormulaireMiseEnVente(FormulaireMiseEnVentePost $request)
     {
@@ -42,7 +36,7 @@ class GoodController extends Controller
         $good->date_fin = Carbon::now()->addDays(Enchere::DUREE_ENCHERE_JOURS);
         $good->vendeur_id = Auth::user()->id;
 
-        // Si un image valide a été envoyée depuis le formulaire, on enregistre l'image et on stock le chemin dans l'objet
+        // Si une image valide a été envoyée depuis le formulaire, on enregistre l'image et on stock le chemin dans l'objet
         if ($request->hasFile("photo") && $request->file("photo")->isValid()) {
             $chemin = Storage::disk("public")->put("photos", $request->file("photo"));
             // On s'assure que le fichier a bien été enregistré dans l'espace de stockage
@@ -51,27 +45,60 @@ class GoodController extends Controller
             }
         }
 
-        if(!$good->save()) {
-            // Si une erreure est survenue on recharge le formulaire avec un message d'erreur
+        if (!$good->save()) {
+            // Si une erreur est survenue on recharge le formulaire avec un message d'erreur
             $data = array(
-              "form_error" => "Une erreur lors de l'enregistrement est survenue !"
+                "form_error" => "Une erreur lors de l'enregistrement est survenue !"
             );
             return view("formulaireMiseEnVente", $data);
         } else {
             // On recharge la page avec un message de succès
             $data = array(
                 "form_succes" => "Votre objet a bien été mis en vente.",
-                "good_url" => "objet/$good->id"
+                "good" => $good
             );
-            return view( "formulaireMiseEnvente", $data);
+            return view("formulaireMiseEnvente", $data);
         }
     }
 
-    public function traiterRechercheObjet(Request $request)
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function afficherObjet($id)
+    {
+        $good = Good::find($id);
+
+        // Si l'objet n'existe pas, on renvoie une erreur
+        if (empty($good)) {
+            abort(404);
+        }
+
+        $data = array(
+            "good" => $good
+        );
+        return view("detailObjet", $data);
+    }
+
+    /**
+     * @param RechercheObjetPost $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function traiterRechercheObjet(RechercheObjetPost $request)
     {
         $data = array(
-            'recherche' => Good::where('titre', 'LIKE', '%' . $request->recherche . '%')->get()
+            'recherche' => Good::where('titre', 'LIKE', '%' . $request->recherche . '%')
+                ->where('date_fin', '>', Carbon::now())
+                ->get()
         );
-        return view('rechercheObjets', $data);
+        return view('rechercheObjet', $data);
+    }
+
+    public function afficherVentesEnCours(){
+        $data = array(
+            'goods' => Good::where('date_fin', '>', Carbon::now())
+                ->orderBy("date_debut")->get()
+        );
+        return view('ventesEnCours', $data);
     }
 }

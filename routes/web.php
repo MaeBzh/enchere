@@ -15,30 +15,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('user', 'UserController');
-Route::resource('good', 'GoodController');
-Route::resource('enchere', 'EnchereController');
-
 Auth::routes();
 Route::get('/confirmerInscription/{inscriptionToken}', 'Auth\RegisterController@confirmationInscription');
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Toutes les routes faisant partie de se groupe sont innaccessibles pour un visiteur non authentifié
+Route::middleware("auth")->group(function () {
+    Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/profil', 'ProfilController@afficherProfil');
-Route::get('/ventesEnCours', 'UserController@afficherVentesEnCours');
-Route::get('/ventesTerminees', 'UserController@afficherVentesTerminees');
-Route::get('/achats', 'UserController@afficherAchats');
-Route::get('/encheresEnCours', 'UserController@afficherEncheresEnCours');
-Route::get('/formulaireMiseEnVente', 'GoodController@afficherFormulaireMiseEnVente');
-Route::post('/formulaireMiseEnVente', 'GoodController@traiterFormulaireMiseEnVente');
-Route::post('/rechercheObjet', 'GoodController@traiterRechercheObjet');
-Route::get('/objet/{id}', 'GoodController@afficherObjet');
+    Route::get('/mon_profil', 'UserController@afficherMonProfil');
+    Route::get('/mes_ventes_en_cours', 'UserController@afficherMesVentesEnCours');
+    Route::get('/mes_ventes_terminees', 'UserController@afficherMesVentesTerminees');
+    Route::get('/mes_achats', 'UserController@afficherMesAchats');
+    Route::get('/mes_encheres_en_cours', 'UserController@afficherMesEncheresEnCours');
+    Route::get('/profil/{username}', 'UserController@afficherProfil');
 
+    Route::get('/mettre_en_vente', 'GoodController@afficherFormulaireMiseEnVente');
+    Route::post('/mettre_en_vente', 'GoodController@traiterFormulaireMiseEnVente');
+    Route::post('/recherche', 'GoodController@traiterRechercheObjet');
+    Route::get('/objet/{id}', 'GoodController@afficherObjet');
 
-
-Route::get('test', function (){
-    $user = \Illuminate\Support\Facades\Auth::user();
-    $bien = \App\Good::find(4);
-    $encheres = $user->encheres()->where("good_id", $bien->id)->limit(5)->orderBy("date_enchere", "desc")->get();
-    dd($encheres);
+    Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours');
 });

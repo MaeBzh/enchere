@@ -3,11 +3,11 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>Profil de {{ ucfirst($user->username) }}</h4>
+            <h4>Mon profil</h4>
         </div>
 
         <div class="panel-body">
-            <h4>Informations de l'utilisateur</h4>
+            <h4>Mes informations</h4>
             <ul class="list-group">
                 <li class="list-group-item">Nom : {{ ucfirst($user->nom) }}</li>
                 <li class="list-group-item">Prénom : {{ ucfirst($user->prenom) }}</li>
@@ -16,7 +16,7 @@
 
             <hr>
 
-            <h4>Informations sur les ventes et achats</h4>
+            <h4>Mes ventes et achats</h4>
             <ul class="list-group">
                 <li class="list-group-item">Nombre d'objets mise en ventes : {{ $user->biensVendus->count() + $user->biensEnVente->count() }}</li>
                 <li class="list-group-item">Nombre d'objets vendus : {{ $user->biensVendus->count() }}</li>

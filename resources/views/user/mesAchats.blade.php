@@ -3,13 +3,13 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            Vos achats
+            Mes achats
         </div>
 
         <div class="panel-body">
             <ul class="list-group">
-                @foreach($achats as $achat)
-                    <li class="list-group-item">Libellé : {{ $achat->titre }}</li>
+                @foreach($goods as $good)
+                    <li class="list-group-item">Libellé : {{ $good->titre }}</li>
                 @endforeach
             </ul>
 

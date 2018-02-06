@@ -22,22 +22,32 @@
             @auth
             <ul class="nav navbar-nav">
 
-                <li class="dropdown, @if(\Request::is('profil')) active @endif">
+                <li class="dropdown, @if(\Request::is('mon_*', 'mes_*')) active @endif">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Votre compte <span class="caret"></span></a>
+                       aria-expanded="false">Mon compte <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url('/profil') }}">Votre profil</a></li>
-                        <li><a href="{{ url('/ventesEnCours') }}">Vos ventes en cours</a></li>
-                        <li><a href="{{ url('/ventesTerminees') }}">Vos ventes terminées</a></li>
-                        <li><a href="{{ url('/achats') }}">Vos achats</a></li>
-                        <li><a href="{{ url('/encheresEnCours') }}">Vos enchères en cours</a></li>
+                        <li class="@if(\Request::is('mon_profil')) active @endif">
+                            <a href="{{ url('/mon_profil') }}">Mon profil</a>
+                        </li>
+                        <li class="@if(\Request::is('mes_ventes_en_cours')) active @endif">
+                            <a href="{{ url('/mes_ventes_en_cours') }}">Mes ventes en cours</a>
+                        </li>
+                        <li class="@if(\Request::is('mes_ventes_terminees')) active @endif">
+                            <a href="{{ url('/mes_ventes_terminees') }}">Mes ventes terminées</a>
+                        </li>
+                        <li class="@if(\Request::is('mes_achats')) active @endif">
+                            <a href="{{ url('/mes_achats') }}">Mes achats</a>
+                        </li>
+                        <li class="@if(\Request::is('mes_encheres_en_cours')) active @endif">
+                            <a href="{{ url('/mes_encheres_en_cours') }}">Mes enchères en cours</a>
+                        </li>
                     </ul>
                 </li>
-                <li><a href="{{ url('formulaireMiseEnVente') }}">Mettre un objet en vente</a></li>
-                <li><a href="#">Ventes en cours</a></li>
+                <li><a href="{{ url('/mettre_en_vente') }}">Mettre un objet en vente</a></li>
+                <li><a href="{{ url('/ventes_en_cours') }}">Ventes en cours</a></li>
 
             </ul>
-            <form class="navbar-form navbar-left" method="post" role="search" action="{{ url('rechercheObjet') }}">
+            <form class="navbar-form navbar-left" method="post" role="search" action="{{ url('/recherche') }}">
                 {{ csrf_field() }}
                 <div class="input-group">
                     <input type="text" class="form-control" name="recherche"
