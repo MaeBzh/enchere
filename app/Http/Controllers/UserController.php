@@ -57,7 +57,7 @@ class UserController extends Controller
         $data = array(
             "user" => Auth::user()
         );
-        return view('user.profil', $data);
+        return view('user.monProfil', $data);
     }
 
     public function afficherProfil($username)

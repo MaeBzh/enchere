@@ -9,18 +9,7 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left media-top">
-                    @if(empty($good->photo))
-                        <img class="media-object" src="{{ asset("img_empty.png") }}"
-                             style="width:auto;height:200px">
-                    @else
-                        <img class="media-object" src="{{ asset("storage/$good->photo") }}"
-                             style="width:auto;height:200px">
-                    @endif
-                    @if(!$good->isTermine())
-                    <button class="btn btn-primary btn-block">Faire une enchère</button>
-                    @else
-                        <button class="btn btn-primary disabled btn-block">Enchère terminée</button>
-                    @endif
+                    <img class="media-object" src="{{ $good->getUrlPhoto() }}">
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">Informations sur l'objet</h4>
@@ -32,24 +21,62 @@
                         <li class="list-group-item">Description : {{ $good->description }}</li>
                         <li class="list-group-item">Mise en vente le
                             : {{ $good->date_debut->format("d/m/Y h\hi") }}</li>
-                        <li class="list-group-item">Fin de l'enchère le
-                            : {{ $good->date_fin->format("d/m/Y h\hi") }}</li>
-                        <li class="list-group-item">Vendeur : <a href="{{ url("/profil/".$good->vendeur->username) }}">{{ ucfirst($good->vendeur->username) }}</a></li>
+                        <li class="list-group-item">
+                            @if(!$good->isTermine())
+                                Fin de l'enchère dans : {{ $good->getTempsRestant() }}
+                            @else
+                                Enchère terminée le : {{ $good->date_fin->format("d/m/Y à h\hi") }}
+                            @endif
+                        </li>
+                        <li class="list-group-item">Vendeur : <a
+                                    href="{{ url("/profil/".$good->vendeur->username) }}">{{ ucfirst($good->vendeur->username) }}</a>
+                        </li>
+                        @if($good->vendeur_id != Auth::user()->id)
+                            <li class="list-group-item">
+                                @if($good->isTermine())
+                                    <button class="btn btn-primary disabled btn-block">Enchère terminée</button>
+                                @elseif($good->encheres()->orderBy("id", "desc")->exists() &&
+                                $good->encheres()->orderBy("id", "desc")->first()->acheteur_id == Auth::user()->id)
+                                    <button class="btn btn-success disabled btn-block"><span
+                                                class="glyphicon glyphicon-ok"></span> Vous êtes actuellement le
+                                        meilleur enchérisseur
+                                    </button>
+                                @else
+                                    <button class="btn btn-primary btn-block">Faire une enchère</button>
+                                @endif
+                            </li>
+                        @endif
                     </ul>
                     <hr>
                     <h4>Les dernières enchères</h4>
-                    <ul class="list-group">
-                        @if($good->encheres->count() > 0)
-                            @foreach($good->encheres()->limit(5)->get() as $enchere)
-                                <li class="list-group-item">{{$enchere->date_enchere->format("d/m/Y h\hi")}}
-                                    - {{ $enchere->acheteur->nom }} {{ $enchere->acheteur->prenom }}
-                                    - {{ $enchere->montant }} €
-                                </li>
-                            @endforeach
-                        @else
+
+                    @if($good->encheres->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-align-middle">
+                                <thead>
+                                <tr>
+                                    <th>Date de l'enchère</th>
+                                    <th>Montant de l'enchère</th>
+                                    <th>Enchérisseur</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($good->encheres()->orderBy("id", "desc")->limit(5)->get() as $enchere)
+                                    <tr>
+                                        <td>{{$enchere->date_enchere->format("d/m/Y h\hi")}}</td>
+                                        <td>{{ $enchere->montant }} €</td>
+                                        <td><a href="{{ url("/profil/".$enchere->acheteur->username) }}"
+                                               class="btn-link">{{ ucfirst($enchere->acheteur->username) }}</a></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <ul class="list-group">
                             <li class="list-group-item">Aucune enchère.</li>
-                        @endif
-                    </ul>
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>

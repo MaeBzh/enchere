@@ -3,7 +3,7 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-           Mes ventes en cours
+            Mes ventes en cours
         </div>
 
         <div class="panel-body">
@@ -12,21 +12,20 @@
                     <div class="row">
                         @foreach ($chunkgoods as $good)
                             <div class="col-md-6">
-                                <div class="media btn btn-default" onclick="location.href='{{ url("objet/$good->id") }}'">
+                                <div class="media btn btn-default"
+                                     onclick="location.href='{{ url("objet/$good->id") }}'">
                                     <div class="media-left">
-                                        @if(empty($good->photo))
-                                            <img class="media-object" src="{{ asset("img_empty.png") }}"
-                                                 style="width:auto;height:100px">
-                                        @else
-                                            <img class="media-object" src="{{ asset("storage/$good->photo") }}"
-                                                 style="width:auto;height:100px">
-                                        @endif
+                                        <img class="media-object" src="{{ $good->getUrlPhoto() }}"
+                                             style="width:auto;height:100px">
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">{{ $good->titre }}</h4>
                                         <p>Prix actuel : {{ $good->getPrix() }} €
-                                            <br>Fin de l'enchère le : {{ $good->date_fin->format("d/m/Y h:i") }}
-                                            <br>Vendeur : {{ $good->vendeur->username }}
+                                            <br>Nombre d'enchères : {{ $good->encheres()->count() }}
+                                            <br>Fin de l'enchère dans : {{ $good->getTempsRestant() }}
+                                            <br>Vendeur : <a href="{{ url("/profil/".$good->vendeur->username) }}"
+                                                             class="btn-link">
+                                                {{ ucfirst($good->vendeur->username) }} </a>
                                         </p>
                                     </div>
                                 </div>

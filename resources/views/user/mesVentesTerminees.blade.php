@@ -15,18 +15,14 @@
                                 <div class="media btn btn-default"
                                      onclick="location.href='{{ url("objet/$good->id") }}'">
                                     <div class="media-left">
-                                        @if(empty($good->photo))
-                                            <img class="media-object" src="{{ asset("img_empty.png") }}"
-                                                 style="width:auto;height:100px">
-                                        @else
-                                            <img class="media-object" src="{{ asset("storage/$good->photo") }}"
-                                                 style="width:auto;height:100px">
-                                        @endif
+                                        <img class="media-object" src="{{ $good->getUrlPhoto() }}"
+                                             style="width:auto;height:100px">
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">{{ $good->titre }}</h4>
                                         <p>Prix de depart : {{ $good->prix_depart }} €
-                                            <br>Enchère terminée le : {{ $good->date_fin->format("d/m/Y h:i") }}
+                                            <br>Nombre d'enchères : {{ $good->encheres()->count() }}
+                                            <br>Enchère terminée le : {{ $good->date_fin->format("d/m/Y à h:i") }}
                                             @if($good->acheteur()->exists())
                                                 <br>Prix de vente : {{ $good->getPrix() }} €
                                                 <br>Acheteur : {{ $good->acheteur->username }}
