@@ -36,17 +36,53 @@ class Good extends Model
         if (!empty($this->prix_final)) {
             return $this->prix_final;
         } elseif ($this->encheres()->exists()) {
-            return $this->encheres()->orderBy("date_enchere", "desc")->first()->montant;
+            return $this->encheres()->orderBy("id", "desc")->first()->montant;
         } else {
             return $this->prix_depart;
         }
     }
 
-    public function isTermine(){
+    public function getUrlPhoto()
+    {
+        if (!empty($this->photo)) {
+            return asset("storage/$this->photo");
+        } else {
+            return asset("img_empty.png");
+        }
+    }
+
+    public function isTermine()
+    {
         return $this->date_fin <= Carbon::now();
     }
 
-    public function isVendu(){
-        return $this->encheres()-exists();
+    public function getTempsRestant()
+    {
+        if (!$this->isTermine()) {
+            $difference = $this->date_fin->diff(Carbon::now());
+
+            $temps_restant = "";
+            if (($days = $difference->d) > 0) {
+                $temps_restant .= "{$days}j";
+            }
+            if (($hours = $difference->h) > 0) {
+                $temps_restant .= " {$hours}h";
+            }
+            if (($minutes = $difference->i) > 0) {
+                $temps_restant .= " {$minutes}m";
+            }
+            if (($seconds = $difference->s) > 0) {
+                $temps_restant .= " {$seconds}s";
+            }
+
+            return trim($temps_restant, " ");
+        }
+
+        return null;
+    }
+
+    public function isVendu()
+    {
+        return $this->encheres() - exists();
     }
 }
