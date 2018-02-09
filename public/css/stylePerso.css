@@ -1,5 +1,9 @@
-.titreColonne{
-    background-color: #777777;
+.clickable{
+    cursor: pointer;
+}
+
+.not-clickable{
+    cursor: default;
 }
 
 table.table-align-middle td, table.table-align-middle th {
@@ -13,6 +17,33 @@ table.table-align-middle td > img {
     display: block;
 }
 
-.media-object{
+.media-object {
     max-width: 25em;
+}
+
+.badge {
+    padding: 1px 9px 2px;
+    font-size: 12.025px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #ffffff;
+    background-color: #999999;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+.badge-error {
+    background-color: #d9534f;
+}
+.badge-warning {
+    background-color: #f0ad4e;
+}
+.badge-success {
+    background-color: #5cb85c;
+}
+.badge-info {
+    background-color: #5bc0de;
+}
+.badge-primary {
+    background-color: #337ab7;
 }

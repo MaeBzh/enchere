@@ -14,7 +14,7 @@ class FormulaireMiseEnVentePost extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check();
+        return Auth::check() && Auth::user()->hasEnoughCredits();
     }
 
     /**

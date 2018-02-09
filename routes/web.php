@@ -15,39 +15,35 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    if (\Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->to("/ventes_en_cours");
+    } else {
+        return redirect()->to("/");
+    }
+});
+
 Auth::routes();
-Route::get('/confirmerInscription/{inscriptionToken}', 'Auth\RegisterController@confirmationInscription');
+Route::get('/confirmerInscription/{inscriptionToken}', 'Auth\RegisterController@confirmationInscription')->name("confirmation_inscription");
 
 // Toutes les routes faisant partie de se groupe sont innaccessibles pour un visiteur non authentifié
 Route::middleware("auth")->group(function () {
-    Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/mon_profil', 'UserController@afficherMonProfil');
-    Route::get('/mes_ventes_en_cours', 'UserController@afficherMesVentesEnCours');
-    Route::get('/mes_ventes_terminees', 'UserController@afficherMesVentesTerminees');
-    Route::get('/mes_achats', 'UserController@afficherMesAchats');
-    Route::get('/mes_encheres_en_cours', 'UserController@afficherMesEncheresEnCours');
-    Route::get('/profil/{username}', 'UserController@afficherProfil');
+    Route::get('/mon_profil', 'UserController@afficherMonProfil')->name("user.profil");
+    Route::get('/mes_ventes_en_cours', 'UserController@afficherMesVentesEnCours')->name("user.ventes_en_cours");
+    Route::get('/mes_ventes_terminees', 'UserController@afficherMesVentesTerminees')->name("user.ventes_terminees");
+    Route::get('/mes_achats', 'UserController@afficherMesAchats')->name("user.achats");
+    Route::get('/mes_encheres_en_cours', 'UserController@afficherMesEncheresEnCours')->name("user.encheres_en_cours");
 
-    Route::get('/mettre_en_vente', 'GoodController@afficherFormulaireMiseEnVente');
-    Route::post('/mettre_en_vente', 'GoodController@traiterFormulaireMiseEnVente');
-    Route::post('/recherche', 'GoodController@traiterRechercheObjet');
+    Route::get('/profil/{username}', 'UserController@afficherProfil')->name("all.profil");
 
-    Route::get('/objet/{id}', 'GoodController@afficherObjet');
-    Route::get('/objet/{id}/enchere', 'GoodController@afficherFormulaireFaireEnchere');
-    Route::post('/objet/{id}/enchere', 'GoodController@traiterFormulaireFaireEnchere');
+    Route::get('/mettre_en_vente', 'GoodController@afficherFormulaireMiseEnVente')->name("form.mettre_en_vente.get");
+    Route::post('/mettre_en_vente', 'GoodController@traiterFormulaireMiseEnVente')->name("form.mettre_en_vente.post");
+    Route::post('/recherche', 'GoodController@traiterRechercheObjet')->name("form.recherche.post");
 
-    Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours');
-});
+    Route::get('/objet/{id}', 'GoodController@afficherObjet')->name("objet.detail");
+    Route::get('/objet/{id}/enchere', 'GoodController@afficherFormulaireFaireEnchere')->name("form.faire_enchere.get");
+    Route::post('/objet/{id}/enchere', 'GoodController@traiterFormulaireFaireEnchere')->name("form.faire_enchere.post");
 
-Route::get("test", function () {
-    $prix = 125.25;
-    $prices = explode(".", $prix);
-    $length = strlen($prices[0]);
-    $multiplicateur = str_pad("1", $length-1, "0", STR_PAD_RIGHT);
-    $step = intval($multiplicateur);
-
-    $enchere_min = $prix + $step;
-    var_dump($step);
-    var_dump($enchere_min);
+    Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours')->name("all.ventes_en_cours");
 });

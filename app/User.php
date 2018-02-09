@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nom', 'prenom', 'username', 'email', 'password', 'inscription_token', 'inscription_confirmee'
+        'nom', 'prenom', 'username', 'email', 'password', 'inscription_token', 'inscription_confirmee', 'credits'
     ];
 
     /**
@@ -49,15 +49,21 @@ class User extends Authenticatable
 
     public function biensEnVente()
     {
-        return $this->hasMany(Good::class, 'vendeur_id')->where("date_fin" ,'>', Carbon::now());
+        return $this->hasMany(Good::class, 'vendeur_id')->where("date_fin", '>', Carbon::now());
     }
 
     public function encheresVentesTerminees()
     {
         return $this->hasMany(Enchere::class, 'acheteur_id')->join("goods", "goods.id", '=', "encheres.good_id")->Where("date_fin", '<=', Carbon::now());
     }
+
     public function encheresEnCours()
     {
         return $this->hasMany(Enchere::class, 'acheteur_id')->join("goods", "goods.id", '=', "encheres.good_id")->Where("date_fin", '>', Carbon::now());
+    }
+
+    public function hasEnoughCredits()
+    {
+        return $this->credits >= config("config.credits.vendre_objet", 1);
     }
 }

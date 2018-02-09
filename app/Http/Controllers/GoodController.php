@@ -21,7 +21,11 @@ class GoodController extends Controller
      */
     public function afficherFormulaireMiseEnVente()
     {
-        return view("formulaireMiseEnVente");
+        if (Auth::user()->hasEnoughCredits()) {
+            return view("formulaireMiseEnVente");
+        } else {
+            return view("formulaireMiseEnVenteCreditsInsuffisants");
+        }
     }
 
     /**
@@ -35,7 +39,7 @@ class GoodController extends Controller
         $good->description = $request->description;
         $good->prix_depart = $request->prix_depart;
         $good->date_debut = Carbon::now();
-        $good->date_fin = Carbon::now()->addDays(Enchere::DUREE_ENCHERE_JOURS);
+        $good->date_fin = Carbon::now()->addDays(config("config.encheres.duree_jours"));
         $good->vendeur_id = Auth::user()->id;
 
         // Si une image valide a été envoyée depuis le formulaire, on enregistre l'image et on stock le chemin dans l'objet
@@ -54,6 +58,10 @@ class GoodController extends Controller
             );
             return view("formulaireMiseEnVente", $data);
         } else {
+            // On retire les crédits au vendeur
+            $prix_credit = config("config.credits.vendre_objet", 1);
+            $auth_user = Auth::user();
+            $auth_user->credits -
             // On recharge la page avec un message de succès
             $data = array(
                 "form_succes" => "Votre objet a bien été mis en vente.",
@@ -96,7 +104,8 @@ class GoodController extends Controller
         return view('rechercheObjet', $data);
     }
 
-    public function afficherVentesEnCours(){
+    public function afficherVentesEnCours()
+    {
         $data = array(
             'goods' => Good::where('date_fin', '>', Carbon::now())
                 ->orderBy("date_debut")->get()
@@ -104,17 +113,18 @@ class GoodController extends Controller
         return view('ventesEnCours', $data);
     }
 
-    public function afficherFormulaireFaireEnchere($id){
+    public function afficherFormulaireFaireEnchere($id)
+    {
         $good = Good::find($id);
 
-        if(empty($good)){
+        if (empty($good)) {
             abort(404);
         }
 
         $data = array(
             'good' => $good
         );
-        $view =  View::make('formulaireFaireEnchere', $data)->render();
+        $view = View::make('formulaireFaireEnchere', $data)->render();
 
         $data["modal_title"] = "Encherir sur l'objet : $good->titre";
         $data["modal_body"] = $view;
@@ -122,7 +132,8 @@ class GoodController extends Controller
         return view("layouts.modal", $data);
     }
 
-    public function traiterFormulaireFaireEnchere(FormulaireFaireEncherePost $request){
+    public function traiterFormulaireFaireEnchere(FormulaireFaireEncherePost $request)
+    {
         $enchere = new Enchere();
         $enchere->montant = $request->montant_enchere;
         $enchere->good_id = $request->good_id;

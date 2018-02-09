@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddRegisterConfirmationToUsersTable extends Migration
+class AddCreditsToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddRegisterConfirmationToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string("inscription_token")->nullable();
-            $table->boolean("inscription_confirmee")->default(false);
+            $table->unsignedInteger("credits")->default(config("encheres.nombre_credits_inscription"));
         });
     }
 
@@ -27,8 +26,7 @@ class AddRegisterConfirmationToUsersTable extends Migration
     public function down()
     {
         Schema::table("users", function(Blueprint $table){
-            $table->dropColumn("inscription_token");
-            $table->dropColumn("inscription_confirmee");
+            $table->dropColumn("credits");
         });
     }
 }
