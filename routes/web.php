@@ -32,7 +32,22 @@ Route::middleware("auth")->group(function () {
     Route::get('/mettre_en_vente', 'GoodController@afficherFormulaireMiseEnVente');
     Route::post('/mettre_en_vente', 'GoodController@traiterFormulaireMiseEnVente');
     Route::post('/recherche', 'GoodController@traiterRechercheObjet');
+
     Route::get('/objet/{id}', 'GoodController@afficherObjet');
+    Route::get('/objet/{id}/enchere', 'GoodController@afficherFormulaireFaireEnchere');
+    Route::post('/objet/{id}/enchere', 'GoodController@traiterFormulaireFaireEnchere');
 
     Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours');
+});
+
+Route::get("test", function () {
+    $prix = 125.25;
+    $prices = explode(".", $prix);
+    $length = strlen($prices[0]);
+    $multiplicateur = str_pad("1", $length-1, "0", STR_PAD_RIGHT);
+    $step = intval($multiplicateur);
+
+    $enchere_min = $prix + $step;
+    var_dump($step);
+    var_dump($enchere_min);
 });

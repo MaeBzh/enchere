@@ -20,12 +20,12 @@
                         </li>
                         <li class="list-group-item">Description : {{ $good->description }}</li>
                         <li class="list-group-item">Mise en vente le
-                            : {{ $good->date_debut->format("d/m/Y h\hi") }}</li>
+                            : {{ $good->date_debut->format("d/m/Y à H\hi") }}</li>
                         <li class="list-group-item">
                             @if(!$good->isTermine())
                                 Fin de l'enchère dans : {{ $good->getTempsRestant() }}
                             @else
-                                Enchère terminée le : {{ $good->date_fin->format("d/m/Y à h\hi") }}
+                                Enchère terminée le : {{ $good->date_fin->format("d/m/Y à H\hi") }}
                             @endif
                         </li>
                         <li class="list-group-item">Vendeur : <a
@@ -42,7 +42,9 @@
                                         meilleur enchérisseur
                                     </button>
                                 @else
-                                    <button class="btn btn-primary btn-block">Faire une enchère</button>
+                                    <input id="good_id" type="hidden" value="{{$good->id}}">
+                                    <button id="faireEnchere" class="btn btn-primary btn-block">Faire une enchère
+                                    </button>
                                 @endif
                             </li>
                         @endif
@@ -63,7 +65,7 @@
                                 <tbody>
                                 @foreach($good->encheres()->orderBy("id", "desc")->limit(5)->get() as $enchere)
                                     <tr>
-                                        <td>{{$enchere->date_enchere->format("d/m/Y h\hi")}}</td>
+                                        <td>{{$enchere->date_enchere->format("d/m/Y à H\hi")}}</td>
                                         <td>{{ $enchere->montant }} €</td>
                                         <td><a href="{{ url("/profil/".$enchere->acheteur->username) }}"
                                                class="btn-link">{{ ucfirst($enchere->acheteur->username) }}</a></td>
@@ -85,4 +87,17 @@
 
 @section('scripts')
     <script src="{{ asset("js/home.js") }}"></script>
+    <script>
+        $("#faireEnchere").click(function () {
+            var id = $("#good_id").val();
+            var url = "{{ url("/objet/%id%/enchere") }}";
+
+            $.get(url.replace("%id%", id)).done(function (response_html) {
+                $("#modal").html(response_html);
+                $(".modal.fade").modal("show");
+            }).fail(function (response_error) {
+                console.log(response_error);
+            });
+        });
+    </script>
 @endsection

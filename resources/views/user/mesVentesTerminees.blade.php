@@ -22,7 +22,7 @@
                                         <h4 class="media-heading">{{ $good->titre }}</h4>
                                         <p>Prix de depart : {{ $good->prix_depart }} €
                                             <br>Nombre d'enchères : {{ $good->encheres()->count() }}
-                                            <br>Enchère terminée le : {{ $good->date_fin->format("d/m/Y à h:i") }}
+                                            <br>Enchère terminée le : {{ $good->date_fin->format("d/m/Y à H\hi") }}
                                             @if($good->acheteur()->exists())
                                                 <br>Prix de vente : {{ $good->getPrix() }} €
                                                 <br>Acheteur : {{ $good->acheteur->username }}

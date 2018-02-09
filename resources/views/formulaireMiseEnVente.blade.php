@@ -31,13 +31,13 @@
                                 <span class="glyphicon glyphicon-info-sign"></span>
                                 Les objets sont mis en vente pour une durée de 7 jours.
                             </div>
-                            <form class="form-horizontal" method="POST" action="{{ url('/formulaireMiseEnVente') }}"
+                            <form id="formulaireMiseEnVente" class="form-horizontal" method="POST" action="{{ url('/formulaireMiseEnVente') }}"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
 
-                                <div class="form-group raw">
+                                <div class="form-group row">
                                     <label for="titre" class="col-md-4 control-label">Titre</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <input id="titre" type="text" class="form-control" name="titre" required
                                                autofocus>
                                     </div>
@@ -46,7 +46,7 @@
                                 <div class="form-group raw">
                                     <label for="description" class="col-md-4 control-label">Description de votre
                                         objet</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <textarea id="description" class="form-control" name="description"
                                                   required></textarea>
                                     </div>
@@ -54,15 +54,15 @@
 
                                 <div class="form-group raw">
                                     <label for="prix_depart" class="col-md-4 control-label">Prix de départ</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <input id="prix_depart" type="number" class="form-control" name="prix_depart"
-                                               required min="0.00" step="0.01">
+                                               required min="0" step="1">
                                     </div>
                                 </div>
 
                                 <div class="form-group raw">
                                     <label for="photo" class="col-md-4 control-label">Photo de l'objet</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <input id="photo" type="file" class="btn btn-primary btn-block" name="photo"
                                                required accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|images/*">
                                         <p class="help-block">Extensions autorisées : jpg, png, gif, bmp.</p>

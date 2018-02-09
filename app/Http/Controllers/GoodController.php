@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enchere;
 use App\Good;
+use App\Http\Requests\FormulaireFaireEncherePost;
 use App\Http\Requests\FormulaireMiseEnVentePost;
 use App\Http\Requests\RechercheObjetPost;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class GoodController extends Controller
 {
@@ -100,5 +102,34 @@ class GoodController extends Controller
                 ->orderBy("date_debut")->get()
         );
         return view('ventesEnCours', $data);
+    }
+
+    public function afficherFormulaireFaireEnchere($id){
+        $good = Good::find($id);
+
+        if(empty($good)){
+            abort(404);
+        }
+
+        $data = array(
+            'good' => $good
+        );
+        $view =  View::make('formulaireFaireEnchere', $data)->render();
+
+        $data["modal_title"] = "Encherir sur l'objet : $good->titre";
+        $data["modal_body"] = $view;
+
+        return view("layouts.modal", $data);
+    }
+
+    public function traiterFormulaireFaireEnchere(FormulaireFaireEncherePost $request){
+        $enchere = new Enchere();
+        $enchere->montant = $request->montant_enchere;
+        $enchere->good_id = $request->good_id;
+        $enchere->acheteur_id = Auth::user()->id;
+        $enchere->date_enchere = Carbon::now();
+        $enchere->save();
+
+        return redirect()->to("/objet/$request->good_id");
     }
 }

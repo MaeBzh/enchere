@@ -30,7 +30,7 @@
                                 <td>{{$good->titre}}</td>
                                 <td>{{$good->getPrix()}} €</td>
                                 <td>{{ $good->encheres()->count() }}</td>
-                                <td>{{$good->date_fin->format("d/m/Y à h\hi")}}</td>
+                                <td>{{$good->date_fin->format("d/m/Y à H\hi")}}</td>
                                 <td><a href="{{ url("/profil/".$good->vendeur->username) }}"
                                        class="btn-link">{{ ucfirst($good->vendeur->username) }}</a></td>
                             </tr>
