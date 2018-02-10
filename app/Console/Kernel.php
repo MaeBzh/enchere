@@ -3,9 +3,12 @@
 namespace App\Console;
 
 use App\Good;
+use App\Mail\EmailInfoVenteTermineeAcheteur;
+use App\Mail\EmailInfoVenteTermineeVendeur;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -21,20 +24,29 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         // Tache de fond qui associe l'id du meilleur encherisseur sur les ventes terminées sans acheteur associé.
         $schedule->call(function () {
-            $ventes_terminees_sans_acheteur = Good::where("date_fin", "<", Carbon::now())->whereNull("acheteur_id")->get();
-            foreach ($ventes_terminees_sans_acheteur as $good){
-                if($good->encheres()->exists()){
+            $ventes_terminees_non_traitees = Good::where("date_fin", "<", Carbon::now())
+                ->whereNull("prix_final")
+                ->get();
+            foreach ($ventes_terminees_non_traitees as $good) {
+                if ($good->encheres()->exists()) {
                     $enchere_gagnante = $good->encheres()->orderBy("id", "desc")->first();
                     $good->acheteur_id = $enchere_gagnante->acheteur_id;
-                    $good->save();
-                    // todo envoyer une notification a lacheteur et au vendeur
+                    $good->prix_final = $enchere_gagnante->montant;
+                } else {
+                    $good->prix_final = $good->prox_depart;
+                }
+                if ($good->save()) {
+                    if ($good->acheteur->exists()) {
+                        Mail::to($good->acheteur->email)->send(new EmailInfoVenteTermineeAcheteur($good));
+                    }
+                    Mail::to($good->vendeur->email)->send(new EmailInfoVenteTermineeVendeur($good));
                 }
             }
         })->everyFiveMinutes();
@@ -47,7 +59,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

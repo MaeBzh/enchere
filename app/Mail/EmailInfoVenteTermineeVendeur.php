@@ -8,19 +8,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailConfirmationInscription extends Mailable
+class EmailInfoVenteTermineeVendeur extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
+    protected $good;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Good $good)
     {
-        $this->user = $user;
+        $this->good = $good;
     }
 
     /**
@@ -31,9 +31,9 @@ class EmailConfirmationInscription extends Mailable
     public function build()
     {
         $data = array(
-            "user" => $this->user
+            "good" => $this->good
         );
         return $this->from("projetdevweb.siteencheres@gmail.com", "Site d'enchères")
-            ->view('emails.confirmationInscription', $data);
+            ->view('emails.InfoVenteTermineeAcheteur', $data);
     }
 }

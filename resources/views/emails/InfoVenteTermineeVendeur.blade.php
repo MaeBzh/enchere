@@ -208,22 +208,25 @@
                             <tr>
                                 <td align='left' style='padding: 0 56px 28px 56px;' valign='top'>
                                     <div style='font-family: "lato", "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 28px;font-size: 18px; color: #333;'>
-                                        Bonjour {{ $user->username }},
+                                        Bonjour {{ $good->acheteur->username }},
                                         <br>
-                                        Pour confirmer votre inscription, merci de cliquer sur le bouton de validation ci-dessous :
+                                        @if($good->acheteur->exists())
+                                            Bravo, vous venez de vendre un objet :
+                                            <br> Objet : {{ $good->titre }}
+                                            <br> Montant initial : {{ $good->prix_depart }} €
+                                            <br> Montant finale : {{ $good->prix_final }} €
+                                            <br> Contact de l'acheteur : {{ $good->acheteur->username }}
+                                            - {{ $good->acheteur->email }}
+                                        @else
+                                            Dommage, aucune enchère pour votre objet n'a été faite dans le temps imparti :
+                                            <br> Objet : {{ $good->titre }}
+                                            <br> Montant initial : {{ $good->prix_depart }} €
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td align='left' style='padding: 0 56px;' valign='top'>
-                                    <div>
-                                        <a style="background-color:#E15718;border-radius:50px;color:#ffffff;display:inline-block;font-family: &#39;lato&#39;, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:18px;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
-                                           href="{{ url("confirmerInscription/$user->inscription_token") }}">Confirmer l'inscription</a>
-                                    </div>
-                                </td>
                             <tr>
                                 <td align='left' style='padding: 28px 56px 28px 56px;' valign='top'></td>
-                            </tr>
                             </tr>
                         </table>
                     </td>
