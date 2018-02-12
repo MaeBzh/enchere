@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormulaireRechargerCreditsPost;
+use App\Mail\EmailRechargeCredits;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -62,7 +65,7 @@ class UserController extends Controller
 
     public function afficherProfil($username)
     {
-        if(Auth::user()->username == $username){
+        if (Auth::user()->username == $username) {
             return redirect()->to("/mon_profil");
         }
 
@@ -76,5 +79,31 @@ class UserController extends Controller
             "user" => $user
         );
         return view('profil', $data);
+    }
+
+    public function afficherFormulaireRechargerCredits()
+    {
+        return view('formulaireRechargerCredits');
+    }
+
+    public function traiterFormulaireRechargerCredits(FormulaireRechargerCreditsPost $request)
+    {
+        $auth_user = Auth::user();
+        $auth_user->credits += $request->credits;
+        
+        if (!$auth_user->save()) {
+            // Si une erreur est survenue on recharge le formulaire avec un message d'erreur
+            $data = array(
+                "form_error" => "Une erreur lors du paiement est survenue !"
+            );
+            return view("formulaireRechargerCredits", $data);
+        } else {
+            Mail::to($auth_user->email)->send(new EmailRechargeCredits($auth_user, $request->credits));
+            // On recharge la page avec un message de succès
+            $data = array(
+                "form_succes" => "Merci pour votre commande, vos nouveaux crédits ont été ajoutés à votre compte.",
+            );
+            return view("formulaireRechargerCredits", $data);
+        }
     }
 }

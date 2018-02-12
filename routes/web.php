@@ -34,6 +34,8 @@ Route::middleware("auth")->group(function () {
     Route::get('/mes_ventes_terminees', 'UserController@afficherMesVentesTerminees')->name("user.ventes_terminees");
     Route::get('/mes_achats', 'UserController@afficherMesAchats')->name("user.achats");
     Route::get('/mes_encheres_en_cours', 'UserController@afficherMesEncheresEnCours')->name("user.encheres_en_cours");
+    Route::get('/recharger_mes_credits', 'UserController@afficherFormulaireRechargerCredits')->name("user.recharger_credits.get");
+    Route::post('/recharger_mes_credits', 'UserController@traiterFormulaireRechargerCredits')->name("user.recharger_credits.post");
 
     Route::get('/profil/{username}', 'UserController@afficherProfil')->name("all.profil");
 
@@ -46,4 +48,9 @@ Route::middleware("auth")->group(function () {
     Route::post('/objet/{id}/enchere', 'GoodController@traiterFormulaireFaireEnchere')->name("form.faire_enchere.post");
 
     Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours')->name("all.ventes_en_cours");
+});
+
+Route::post('/test', function (){
+    $data = request()->all();
+   return response()->json($data);
 });

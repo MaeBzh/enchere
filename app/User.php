@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Mail\EmailResetPassword;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
@@ -31,6 +33,10 @@ class User extends Authenticatable
 
     protected $table = 'users';
     public $timestamps = false;
+
+    public function sendPasswordResetNotification ($token){
+        Mail::to($this->email)->send(new EmailResetPassword($token));
+    }
 
     public function biensAchetes()
     {

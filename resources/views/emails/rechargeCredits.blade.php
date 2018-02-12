@@ -208,12 +208,17 @@
                             <tr>
                                 <td align='left' style='padding: 0 56px 28px 56px;' valign='top'>
                                     <div style='font-family: "lato", "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 28px;font-size: 18px; color: #333;'>
-                                        Bonjour {{ $good->acheteur->username }},
+                                        Bonjour {{ $user->username }},
                                         <br>
-                                        Bravo, vous venez de remporter une enchère :
-                                        <br> Objet : {{ $good->titre }}
-                                        <br> Montant à payer : {{ $good->prix_final }} €
-                                        <br> Contact du vendeur : {{ $good->vendeur->username }} - {{ $good->vendeur->email }}
+                                        <br>
+                                        Votre commande de crédits a bien été prise en compte et nous vous remercions de
+                                        votre confiance.
+                                        <br>
+                                        <br> Numéro de commande : {{ str_random(8) }}
+                                        <br> Date de commande : {{ \Carbon\Carbon::now()->format("d/m/Y à H:i:s") }}
+                                        <br> Nombre de crédits acheté : {{ $credits }}
+                                        <br> Montant de la commande : @if($credits == 10) 10 @elseif($credits == 25)
+                                            22.5 @else 40 @endif €
                                     </div>
                                 </td>
                             </tr>

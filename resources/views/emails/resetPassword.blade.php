@@ -208,12 +208,19 @@
                             <tr>
                                 <td align='left' style='padding: 0 56px 28px 56px;' valign='top'>
                                     <div style='font-family: "lato", "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 28px;font-size: 18px; color: #333;'>
-                                        Bonjour {{ $good->acheteur->username }},
+                                        Bonjour,
                                         <br>
-                                        Bravo, vous venez de remporter une enchère :
-                                        <br> Objet : {{ $good->titre }}
-                                        <br> Montant à payer : {{ $good->prix_final }} €
-                                        <br> Contact du vendeur : {{ $good->vendeur->username }} - {{ $good->vendeur->email }}
+                                        Vous recevez cet e-mail, car nous avons reçu une demande de réinitialisation du mot de passe pour votre compte.
+                                        <br>
+                                        Si vous n'avez pas demandé la réinitialisation du mot de passe, ignorez ce message.
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align='left' style='padding: 0 56px;' valign='top'>
+                                    <div>
+                                        <a style="background-color:#E15718;border-radius:50px;color:#ffffff;display:inline-block;font-family: &#39;lato&#39;, &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:18px;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
+                                           href="{{ url("/password/reset/".$token) }}">Reinitialiser mon mot de passe</a>
                                     </div>
                                 </td>
                             </tr>

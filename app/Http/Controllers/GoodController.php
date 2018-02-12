@@ -34,6 +34,8 @@ class GoodController extends Controller
      */
     public function traiterFormulaireMiseEnVente(FormulaireMiseEnVentePost $request)
     {
+//        dd( $request->file("photo"));
+
         $good = new Good();
         $good->titre = $request->titre;
         $good->description = $request->description;
@@ -42,32 +44,31 @@ class GoodController extends Controller
         $good->date_fin = Carbon::now()->addDays(config("config.encheres.duree_jours"));
         $good->vendeur_id = Auth::user()->id;
 
+
+
         // Si une image valide a été envoyée depuis le formulaire, on enregistre l'image et on stock le chemin dans l'objet
         if ($request->hasFile("photo") && $request->file("photo")->isValid()) {
             $chemin = Storage::disk("public")->put("photos", $request->file("photo"));
             // On s'assure que le fichier a bien été enregistré dans l'espace de stockage
-            if (Storage::exists($chemin)) {
+            if (Storage::disk("public")->exists($chemin)) {
                 $good->photo = $chemin;
             }
         }
 
         if (!$good->save()) {
-            // Si une erreur est survenue on recharge le formulaire avec un message d'erreur
-            $data = array(
-                "form_error" => "Une erreur lors de l'enregistrement est survenue !"
-            );
-            return view("formulaireMiseEnVente", $data);
+            // Si une erreur est survenue on renvoie le message d'erreur
+            $html = "<div class='alert alert-danger'>Une erreur lors de l'enregistrement est survenue. Veuillez essayer à nouveau.</div>";
+            return response($html, 500);
         } else {
             // On retire les crédits au vendeur
             $prix_credit = config("config.credits.vendre_objet", 1);
+
             $auth_user = Auth::user();
-            $auth_user->credits -
-            // On recharge la page avec un message de succès
-            $data = array(
-                "form_succes" => "Votre objet a bien été mis en vente.",
-                "good" => $good
-            );
-            return view("formulaireMiseEnvente", $data);
+            $auth_user->credits -= $prix_credit;
+            $auth_user->save();
+
+            $html = "<div class='alert alert-success'>Votre objet a bien été mis en vente.<a href='" . url('/objet/' . $good->id) . "' class='btn-link'>Cliquer ici pour voir l'objet</a></div>";
+            return response($html, 200);
         }
     }
 

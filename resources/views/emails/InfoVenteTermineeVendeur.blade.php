@@ -226,7 +226,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td align='left' style='padding: 28px 56px 28px 56px;' valign='top'></td>
+                                <td align='left' style='padding: 28px 56px 28px 56px;' valign='top'>
+                                    Cordialement,
+                                    <br>L'équipe Projet DevWeb - Site d'enchères
+                                </td>
                             </tr>
                         </table>
                     </td>

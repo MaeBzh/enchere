@@ -81,15 +81,20 @@
                                     $credit_restant = Auth::user()->credits - $cout_credit;
                                 @endphp
                                 <div class="alert alert-info">
-                                <p>Coût de la mise en vente : <strong>{{ $cout_credit }}</strong> @if($cout_credit > 1) crédits @else crédit @endif.</p>
-                                <p>Crédits restant après l'opération : <strong>{{ $credit_restant }}</strong> @if($credit_restant > 1) crédits @else crédit @endif.</p>
+                                    <p>Coût de la mise en vente :
+                                        <strong>{{ $cout_credit }}</strong> @if($cout_credit > 1) crédits @else
+                                            crédit @endif.</p>
+                                    <p>Crédits restant après l'opération :
+                                        <strong>{{ $credit_restant }}</strong> @if($credit_restant > 1) crédits @else
+                                            crédit @endif.</p>
                                 </div>
                                 <hr>
 
-                                <button type="submit" class="btn btn-primary btn-block">
+                                <button id="submit" type="submit" class="btn btn-primary btn-block">
                                     Mettre en vente
                                 </button>
-
+                                <br>
+                                <div id="response"></div>
                             </form>
                         @endif
                     </div>
@@ -97,4 +102,30 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section("scripts")
+    <script>
+        $("#formulaireMiseEnVente").submit(function(event){
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: $(this).attr("method"),
+                dataType: "JSON",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data, status) {
+                    var html = $.parseHTML(data);
+                    $("#response").html(html);
+                    $("#submit").prop("disabled",true);
+                },
+                error: function (xhr, desc, err) {
+                    var html = $.parseHTML(xhr.responseText);
+                    $("#response").html(html);
+                }
+            });
+        });
+    </script>
 @endsection
