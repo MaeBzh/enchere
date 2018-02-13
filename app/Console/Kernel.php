@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
                     $good->acheteur_id = $enchere_gagnante->acheteur_id;
                     $good->prix_final = $enchere_gagnante->montant;
                 } else {
-                    $good->prix_final = $good->prox_depart;
+                    $good->prix_final = $good->prix_depart;
                 }
                 if ($good->save()) {
                     if ($good->acheteur->exists()) {

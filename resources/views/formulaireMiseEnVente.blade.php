@@ -90,7 +90,7 @@
                                 </div>
                                 <hr>
 
-                                <button id="submit" type="submit" class="btn btn-primary btn-block">
+                                <button id="btnSubmit" type="submit" class="btn btn-primary btn-block">
                                     Mettre en vente
                                 </button>
                                 <br>
@@ -117,11 +117,10 @@
                 processData: false,
                 contentType: false,
                 success: function (data, status) {
-                    var html = $.parseHTML(data);
-                    $("#response").html(html);
-                    $("#submit").prop("disabled",true);
+                    $("#response").html(data);
                 },
                 error: function (xhr, desc, err) {
+                    // Pour des soucis d'affichage des balises HTML, on parse le texte en HTML avec jquery
                     var html = $.parseHTML(xhr.responseText);
                     $("#response").html(html);
                 }
