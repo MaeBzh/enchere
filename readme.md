@@ -35,3 +35,14 @@ Les modification suivantes sont à effectuer dans le fichier *.env* :
 * renseigner `DUREE_ENCHERE_JOURS` pour modifier la durée de vente des objets (par défaut 7 jours) 
 * renseigner `NB_CREDITS_INSCRIPTION` pour modifier le nombre de crédits reçus lors de l'inscription (par défaut 5 crédits)
 * renseigner `NB_CREDITS_MISE_EN_VENTE` pour modifier le coût en crédits d'une mise en vente d'un objet (par défaut 1 crédit)
+
+### Lancer le serveur ### 
+
+Dans un terminal, exécuter la commande suivante :
+* taper `php artisan serve`
+
+### Traitement des enchères terminées ### 
+
+Dans un terminal, exécuter la commande suivante :
+* taper `* * * * * php artisan schedule:run >> /dev/null 2>&1` pour lancer les tâches de fond Laravel de manière continue (via Crontab)
+* alternative : taper `php artisan schedule:run` pour lancer les tâches de fond en manuel (la commande doit être relancé en manuel pour lancer le scheduler)
