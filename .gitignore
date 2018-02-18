@@ -12,3 +12,4 @@ yarn-error.log
 .env
 public/js/npm.js
 /nbproject/private/
+composer.lock
