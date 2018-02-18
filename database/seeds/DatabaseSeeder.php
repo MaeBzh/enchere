@@ -46,7 +46,13 @@ class DatabaseSeeder extends Seeder
             $prix_depart = $factory->randomNumber(2);
 
             $good = new Good();
-            $good->photo = null; // null == public/img_empty.png
+            $chemin = Storage::disk("public")->put("photos", file_get_contents("http://lorempixel.com/200/200/technics"));
+            // On s'assure que le fichier a bien été enregistré dans l'espace de stockage
+            if (Storage::disk("public")->exists($chemin)) {
+                $good->photo = $chemin;
+            } else {
+                $good->photo = null;  // null == public/img_empty.png
+            }
             $good->titre = ucfirst($factory->word);
             $good->description = $factory->paragraph;
             $good->prix_depart = $prix_depart;
@@ -86,7 +92,13 @@ class DatabaseSeeder extends Seeder
             $prix_final = $prix_depart + 10;
             
             $good = new Good();
-            $good->photo = null; // null == public/img_empty.png
+            $chemin = Storage::disk("public")->put("photos", file_get_contents("http://lorempixel.com/200/200/technics"));
+            // On s'assure que le fichier a bien été enregistré dans l'espace de stockage
+            if (Storage::disk("public")->exists($chemin)) {
+                $good->photo = $chemin;
+            } else {
+                $good->photo = null;  // null == public/img_empty.png
+            }
             $good->titre = ucfirst($factory->word);
             $good->description = $factory->paragraph;
             $good->prix_depart = $prix_depart;
