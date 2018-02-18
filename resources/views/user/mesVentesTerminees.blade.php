@@ -13,7 +13,7 @@
                         @foreach ($chunkgoods as $good)
                             <div class="col-md-3 portfolio-item">
                                 <div class="card clickable" onclick="location.href='{{ url("objet/$good->id") }}'">
-                                    <img src="{{$good->getUrlPhoto()}}" alt="Avatar" style="width:100%">
+                                    <img src="{{$good->getUrlPhoto()}}" alt="Avatar" class="card-img">
                                     <div class="card-body">
                                         <h4><b>{{ ucfirst($good->titre) }}</b></h4>
                                         <p>Prix de depart : {{ $good->prix_depart }} €</p>

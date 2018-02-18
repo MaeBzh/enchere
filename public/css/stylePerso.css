@@ -18,6 +18,15 @@
     padding: 2px 16px;
 }
 
+.card-img{
+    max-height: 200px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    margin: auto;
+    display: block;
+}
+
 .clickable{
     cursor: pointer;
 }
