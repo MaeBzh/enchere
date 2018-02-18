@@ -15,14 +15,14 @@ class CreateGoodsTable extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('photo');
+            $table->text('photo')->nullable();
             $table->string('titre');
             $table->text('description');
             $table->float('prix_depart');
-            $table->float('prix_final');
+            $table->float('prix_final')->nullable();
             $table->timestamp('date_debut')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('date_fin')->nullable();
-            $table->unsignedInteger('acheteur_id');
+            $table->unsignedInteger('acheteur_id')->nullable();
             $table->unsignedInteger('vendeur_id');
 
             $table->foreign('acheteur_id')

@@ -51,8 +51,8 @@ class DatabaseSeeder extends Seeder
             $good->description = $factory->paragraph;
             $good->prix_depart = $prix_depart;
             $good->prix_final = null;
-            $good->date_debut = $factory->dateTimeBetween("-7 days", 'now', "Europe/Paris");
-            $good->date_fin = null;
+            $good->date_debut = $date_debut;
+            $good->date_fin = $date_fin;
             $good->acheteur_id = null;
             $good->vendeur_id = $vendeur->id;
             $good->saveOrFail();
@@ -67,6 +67,7 @@ class DatabaseSeeder extends Seeder
                 $enchere->acheteur_id = $encherisseur->id;
                 $enchere->good_id = $good->id;
                 $enchere->montant = $prix_depart + $j;
+                $enchere->date_enchere = $date_debut;
                 $enchere->saveOrFail();
             }
         }
@@ -107,6 +108,7 @@ class DatabaseSeeder extends Seeder
                 $enchere->acheteur_id = $encherisseur->id;
                 $enchere->good_id = $good->id;
                 $enchere->montant = $prix_depart + $j;
+                $enchere->date_enchere = $date_debut;
                 $enchere->saveOrFail();
             }
             

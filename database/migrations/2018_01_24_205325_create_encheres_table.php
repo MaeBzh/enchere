@@ -17,7 +17,7 @@ class CreateEncheresTable extends Migration
             $table->unsignedInteger('acheteur_id');
             $table->unsignedInteger('good_id');
             $table->float('montant');
-            $table->timestamp('date_enchere');
+            $table->timestamp('date_enchere')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('acheteur_id')
                 ->references('id')->on('users')
