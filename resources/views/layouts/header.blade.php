@@ -41,6 +41,9 @@
                             <li class="@if(\Route::is('user.encheres_en_cours')) active @endif">
                                 <a href="{{ url('/mes_encheres_en_cours') }}">Mes enchères en cours</a>
                             </li>
+                            <li class="@if(\Route::is('user.recharger_mes_credits.*')) active @endif">
+                                <a href="{{ url('/recharger_mes_credits') }}">Recharger mes crédits</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="@if(\Route::is('form.mettre_en_vente.*')) active @endif"><a
