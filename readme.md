@@ -12,10 +12,10 @@ Dans un terminal, executer les commandes suivantes
 * copier *.env.example* to *.env*
 * taper `php artisan key:generate` pour generer une clé sécurisée dans le fichier *.env*
 * configurer les options de connexion à la base de données dans le fichier *.env* :
-   * renseigner DB_CONNECTION
-   * renseigner DB_DATABASE
-   * renseigner DB_USERNAME
-   * renseigner DB_PASSWORD
+   * renseigner `DB_HOST`
+   * renseigner `DB_DATABASE` 
+   * renseigner `DB_USERNAME`
+   * renseigner `DB_PASSWORD`
 * taper `php artisan migrate` pour créer les tables
 * taper `php artisan db:seed` pour générer des jeux de données de démo
 
@@ -29,11 +29,6 @@ Dans un terminal, executer les commandes suivantes
 
 Les modification suivantes sont à effectuées dans le fichier *.env* :
 
-* Pour modifier la durée de ventes des objets :
-** renseigner DUREE_ENCHERE_JOURS (par défaut 7 jours)
-
-* Pour modifier le nombre de crédits donnés lors de l'inscription : 
-** renseigner NB_CREDITS_INSCRIPTION (par défaut 5 crédits)
-
-* Pour modifier le coût en crédits d'une mise en vente d'un objet :
-** renseigner NB_CREDITS_MISE_EN_VENTE (par défaut 1 crédit)
+* renseigner `DUREE_ENCHERE_JOURS` pour modifier la durée de ventes des objets (par défaut 7 jours) 
+* renseigner `NB_CREDITS_INSCRIPTION` Pour modifier le nombre de crédits reçu lors de l'inscription (par défaut 5 crédits)
+* renseigner `NB_CREDITS_MISE_EN_VENTE` pour modifier le coût en crédits d'une mise en vente d'un objet (par défaut 1 crédit)
