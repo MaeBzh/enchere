@@ -46,4 +46,4 @@ Dans un terminal, exécuter la commande suivante :
 
 Dans un terminal, exécuter la commande suivante :
 * taper `* * * * * php artisan schedule:run >> /dev/null 2>&1` pour lancer les tâches de fond Laravel de manière continue (via Crontab)
-* alternative : taper `php artisan schedule:run` pour lancer les tâches de fond en manuel (la commande doit être relancé en manuel pour lancer le scheduler)
+* alternative : taper `php artisan traitement:ventesterminees` pour lancer la tâche de fond sur le traitement des ventes terminées en manuel.
