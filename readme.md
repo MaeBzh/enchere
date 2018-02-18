@@ -1,16 +1,19 @@
 ## Projet DevWeb - Site d'enchères ##
 
-**Site d'enchères** est un projet développé dans le cadre du module x de la formation y du CNAM ([lecnam.net](http://lecnam.net/)).
+**Site d'enchères** est un projet développé dans le cadre du module
+ Développement web : sites dynamiques et développement côté serveur de la
+ formation Programmation de sites web du CNAM ([lecnam.net](http://lecnam.net/)).
 
 ### Installation ###
 
-Dans un terminal, executer les commandes suivantes
-* taper `git clone https://github.com/MaeBzh/enchere.git site_encheres` pour cloner le dépôt 
-* taper `cd site_encheres`
+Dans un terminal, exécuter les commandes suivantes :
+* taper `git clone https://github.com/MaeBzh/enchere.git enchere` pour cloner le dépôt
+* alternative : télécharger le projet sous format .zip, et décompressez-le.
+* taper `cd enchere` // dossier root du projet
 * taper `composer install`
 * taper `composer update`
 * copier *.env.example* to *.env*
-* taper `php artisan key:generate` pour generer une clé sécurisée dans le fichier *.env*
+* taper `php artisan key:generate` pour générer une clé (`APP_KEY`) dans le fichier *.env*
 * configurer les options de connexion à la base de données dans le fichier *.env* :
    * renseigner `DB_HOST`
    * renseigner `DB_DATABASE` 
@@ -27,8 +30,8 @@ Dans un terminal, executer les commandes suivantes
 
 ### Configuration optionnelle ###
 
-Les modification suivantes sont à effectuées dans le fichier *.env* :
+Les modification suivantes sont à effectuer dans le fichier *.env* :
 
-* renseigner `DUREE_ENCHERE_JOURS` pour modifier la durée de ventes des objets (par défaut 7 jours) 
-* renseigner `NB_CREDITS_INSCRIPTION` Pour modifier le nombre de crédits reçu lors de l'inscription (par défaut 5 crédits)
+* renseigner `DUREE_ENCHERE_JOURS` pour modifier la durée de vente des objets (par défaut 7 jours) 
+* renseigner `NB_CREDITS_INSCRIPTION` pour modifier le nombre de crédits reçus lors de l'inscription (par défaut 5 crédits)
 * renseigner `NB_CREDITS_MISE_EN_VENTE` pour modifier le coût en crédits d'une mise en vente d'un objet (par défaut 1 crédit)
