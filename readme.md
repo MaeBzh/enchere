@@ -13,6 +13,7 @@ Dans un terminal, exécuter les commandes suivantes :
 * taper `composer install`
 * taper `composer update`
 * copier *.env.example* to *.env*
+* taper `php artisan storage:link` pour pouvoir accéder aux photos enregistrées dans le dossier storage
 * taper `php artisan key:generate` pour générer une clé (`APP_KEY`) dans le fichier *.env*
 * configurer les options de connexion à la base de données dans le fichier *.env* :
    * renseigner `DB_HOST`
