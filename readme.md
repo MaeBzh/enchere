@@ -39,7 +39,7 @@ Les modification suivantes sont à effectuer dans le fichier *.env* :
 ### Lancer le serveur ### 
 
 Dans un terminal, exécuter la commande suivante :
-* taper `php artisan serve`
+* taper `php artisan serve`, le service web sera accessible depuis l'adresse http://localhost:8000/
 
 ### Traitement des enchères terminées ### 
 
