@@ -26,7 +26,7 @@ Route::get('/home', function () {
 Auth::routes();
 Route::get('/confirmerInscription/{inscriptionToken}', 'Auth\RegisterController@confirmationInscription')->name("confirmation_inscription");
 
-// Toutes les routes faisant partie de se groupe sont innaccessibles pour un visiteur non authentifié
+// Toutes les routes faisant partie de ce groupe sont inaccessibles pour un visiteur non authentifié
 Route::middleware("auth")->group(function () {
 
     Route::get('/mon_profil', 'UserController@afficherMonProfil')->name("user.profil");
@@ -48,9 +48,4 @@ Route::middleware("auth")->group(function () {
     Route::post('/objet/{id}/enchere', 'GoodController@traiterFormulaireFaireEnchere')->name("form.faire_enchere.post");
 
     Route::get('/ventes_en_cours', 'GoodController@afficherVentesEnCours')->name("all.ventes_en_cours");
-});
-
-Route::post('/test', function (){
-    $data = request()->all();
-   return response()->json($data);
 });

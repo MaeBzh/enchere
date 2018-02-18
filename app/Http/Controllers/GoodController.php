@@ -21,7 +21,7 @@ class GoodController extends Controller
      */
     public function afficherFormulaireMiseEnVente()
     {
-        // on test si l'utilisateur a assez de credits pour vendre un nouvel objet
+        // on teste si l'utilisateur a assez de crédits pour vendre un nouvel objet
         if (Auth::user()->hasEnoughCredits()) {
             return view("formulaireMiseEnVente");
         } else {
@@ -50,7 +50,7 @@ class GoodController extends Controller
 
 
 
-        // Si une image valide a été envoyée depuis le formulaire, on enregistre l'image et on stock le chemin dans l'objet
+        // Si une image valide a été envoyée depuis le formulaire, on enregistre l'image et on stocke le chemin dans l'objet
         if ($request->hasFile("photo") && $request->file("photo")->isValid()) {
             $chemin = Storage::disk("public")->put("photos", $request->file("photo"));
             // On s'assure que le fichier a bien été enregistré dans l'espace de stockage

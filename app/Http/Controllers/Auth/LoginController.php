@@ -40,7 +40,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Definie le champs qui sert de login en bdd
+     * Definit le champs qui sert de login en bdd
      * @return string
      */
     public function username()

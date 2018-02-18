@@ -36,7 +36,7 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * On autorise l'acces au controller pour les visiteurs non connectés
+     * On autorise l'accès au controller pour les visiteurs non connectés
      *
      * @return void
      */
@@ -52,7 +52,7 @@ class RegisterController extends Controller
      */
     public function register(RegisterPost $request)
     {
-        // on recupere tous les champs
+        // on recupère tous les champs
         $user = new User();
         $user->nom = $request->nom;
         $user->prenom = $request->prenom;
@@ -61,7 +61,7 @@ class RegisterController extends Controller
         $user->password = bcrypt($request->password);
         $user->inscription_token = str_random(128);
         
-        // si l'insertion en bdd echoue
+        // si l'insertion en bdd échoue
         if(!$user->save()){
             Session::flash("notification", [
                 "status" => "error",
@@ -74,7 +74,7 @@ class RegisterController extends Controller
         // on envoie un email de confirmation d'inscription
         Mail::to($user->email)->send(new EmailConfirmationInscription($user));
 
-        // si l'envoie du mail a échoué
+        // si l'envoi du mail a échoué
         if (Mail::failures()) {
             // on supprime l'utilisateur de la bdd pour annuler l'inscription
             $user->delete();
@@ -107,10 +107,10 @@ class RegisterController extends Controller
      */
     public function confirmationInscription($inscriptionToken, Request $request)
     {
-        // on recupere l'utilisateur qui correspond au token du mail
+        // on récupère l'utilisateur qui correspond au token du mail
         $user = User::where('inscription_token', $inscriptionToken)->first();
         
-        // si on a bien un enregistrement en bdd qui correspond et qui n'est pas deja confirmé
+        // si on a bien un enregistrement en bdd qui correspond et qui n'est pas déjà confirmé
         if (!empty($user) && $user->inscription_confirme == false) {
             // on supprime le token
             $user->inscription_token = null;
