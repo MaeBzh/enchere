@@ -5,6 +5,34 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Good
+ *
+ * @property-read \App\User $acheteur
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Enchere[] $encheres
+ * @property-read \App\User $vendeur
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string|null $photo
+ * @property string|null $titre
+ * @property string $description
+ * @property float $prix_depart
+ * @property float|null $prix_final
+ * @property \Carbon\Carbon $date_debut
+ * @property \Carbon\Carbon|null $date_fin
+ * @property int|null $acheteur_id
+ * @property int $vendeur_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereAcheteurId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereDateDebut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereDateFin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good wherePrixDepart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good wherePrixFinal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereTitre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Good whereVendeurId($value)
+ */
 class Good extends Model
 {
     protected $table = 'goods';
