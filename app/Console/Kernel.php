@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
             $ventes_terminees_non_traitees = Good::where("date_fin", "<", Carbon::now())
                 ->whereNull("prix_final")
                 ->get();
+            
             foreach ($ventes_terminees_non_traitees as $good) {
                 if ($good->encheres()->exists()) {
                     $enchere_gagnante = $good->encheres()->orderBy("id", "desc")->first();
@@ -43,10 +44,10 @@ class Kernel extends ConsoleKernel
                     $good->prix_final = $good->prix_depart;
                 }
                 if ($good->save()) {
+                    Mail::to($good->vendeur->email)->send(new EmailInfoVenteTermineeVendeur($good));
                     if ($good->acheteur->exists()) {
                         Mail::to($good->acheteur->email)->send(new EmailInfoVenteTermineeAcheteur($good));
                     }
-                    Mail::to($good->vendeur->email)->send(new EmailInfoVenteTermineeVendeur($good));
                 }
             }
         })->everyFiveMinutes();

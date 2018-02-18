@@ -22,14 +22,15 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Où rediriger les utilisateurs après la connexion.
      *
      * @var string
      */
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * On autorise l'acces au controller pour les visiteurs non connectés
+     * ou pour les utilisateurs connecté si ils se deconnectent
      *
      * @return void
      */
@@ -38,12 +39,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Definie le champs qui sert de login en bdd
+     * @return string
+     */
     public function username()
     {
         return 'username';
     }
     
-        /**
+    /**
+     * Initialise les informations d'identification.
+     * 
      * @param Request $request
      * @return array
      */

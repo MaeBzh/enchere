@@ -7,20 +7,21 @@ use App\Good;
 use App\Http\Requests\FormulaireFaireEncherePost;
 use App\Http\Requests\FormulaireMiseEnVentePost;
 use App\Http\Requests\RechercheObjetPost;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 class GoodController extends Controller
 {
     /**
+     * Affiche le formulaire MiseEnVente
+     * 
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function afficherFormulaireMiseEnVente()
     {
+        // on test si l'utilisateur a assez de credits pour vendre un nouvel objet
         if (Auth::user()->hasEnoughCredits()) {
             return view("formulaireMiseEnVente");
         } else {
@@ -29,13 +30,16 @@ class GoodController extends Controller
     }
 
     /**
+     * Traite le formulaire MiseEnvente
+     * 
      * @param FormulaireMiseEnVentePost $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function traiterFormulaireMiseEnVente(FormulaireMiseEnVentePost $request)
     {
-//        dd( $request->file("photo"));
-
+        // App/Requests/FormulaireMiseEnVentePost valide les données du formulaire avant d'arriver dans cette fonction
+        
+        // On crée un nouvel objet
         $good = new Good();
         $good->titre = $request->titre;
         $good->description = $request->description;

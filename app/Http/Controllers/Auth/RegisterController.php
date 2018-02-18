@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
+use \App\Http\Requests\RegisterPost;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
@@ -29,14 +29,14 @@ class RegisterController extends Controller
     use RegistersUsers;
 
     /**
-     * Where to redirect users after registration.
+     * Où rediriger les utilisateurs après l'inscription.
      *
      * @var string
      */
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * On autorise l'acces au controller pour les visiteurs non connectés
      *
      * @return void
      */
@@ -46,53 +46,31 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'nom' => $data['nom'],
-            'prenom' => $data['prenom'],
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            // Ajout de la création d'un token unique pour la verification de l'inscription par email
-            'inscription_token' => str_random(128)
-        ]);
-
-    }
-
-    /**
+     * Traitement du formulaire d'inscription
+     * 
      * @param Request $request
      */
-    public function register(Request $request)
+    public function register(RegisterPost $request)
     {
-        // on valide le formulaire
-        $this->validator($request->all())->validate();
-
-        // on créé un utilisateur
-        $user = $this->create($request->all());
-
+        // on recupere tous les champs
+        $user = new User();
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->inscription_token = str_random(128);
+        
+        // si l'insertion en bdd echoue
+        if(!$user->save()){
+            Session::flash("notification", [
+                "status" => "error",
+                "message" => "Une erreur est survenue lors de l'inscription, veuillez réessayer."
+            ]);
+            // on redirige vers le formulaire d'inscription
+            return redirect("/register");
+        }
+        
         // on envoie un email de confirmation d'inscription
         Mail::to($user->email)->send(new EmailConfirmationInscription($user));
 
@@ -105,6 +83,7 @@ class RegisterController extends Controller
                 "status" => "error",
                 "message" => "Une erreur est survenue lors de l'inscription, veuillez réessayer."
             ]);
+            // on redirige vers le formulaire d'inscription
             return redirect("/register");
         } else {
             // si l'email est bien parti
@@ -114,32 +93,43 @@ class RegisterController extends Controller
                 "status" => "success",
                 "message" => "Pour finaliser votre inscription, confirmer votre inscription depuis l'email envoyé à $user->email"
             ]);
+            // on redirige vers le formulaire de connexion
             return redirect("/login");
         }
-
-
     }
 
     /**
+     * L'utilisateur a cliqué sur le lien de validation d'inscription dans son email
+     * 
      * @param $inscriptionToken
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function confirmationInscription($inscriptionToken, Request $request)
     {
+        // on recupere l'utilisateur qui correspond au token du mail
         $user = User::where('inscription_token', $inscriptionToken)->first();
+        
+        // si on a bien un enregistrement en bdd qui correspond et qui n'est pas deja confirmé
         if (!empty($user) && $user->inscription_confirme == false) {
+            // on supprime le token
             $user->inscription_token = null;
+            // on valide l'inscription
             $user->inscription_confirmee = true;
+            // on sauvegarde les modifications
             $user->save();
+            
+            // On authentifie directement l'utilisateur
             Auth::login($user);
 
             Session::flash("notification", array(
                 "status" => "success",
                 "message" => "Votre compte est désormais validé, vous pouvez profiter pleinement du site."
             ));
+            // on redirige l'utilisateur
             return redirect()->to("/home");
         } else {
+            // on renvoie une erreur 404 not found
             abort(404);
         }
     }
