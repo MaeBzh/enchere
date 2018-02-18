@@ -8,6 +8,7 @@
                 <div class="panel-heading">Connexion</div>
 
                 <div class="panel-body">
+                   
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
@@ -61,6 +62,16 @@
                             </div>
                         </div>
                     </form>
+                    
+                    <hr>
+                    
+                    <h3>[DEMONSTRATION] Liste des logins pour tester l'application (mot de passe : '<b>password</b>')</h3>
+                    <ul class="list-group">
+                        @foreach(App\User::all() as $user)
+                            <li class="list-group-item">{{ $user->username }} - compte validé : @if($user->inscription_confirmee) Oui @else Non @endif</li>
+                        @endforeach
+                    </ul>
+
                 </div>
             </div>
         </div>
